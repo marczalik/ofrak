@@ -124,6 +124,5 @@ class LLVM_ELF_Parser(Abstract_LLVM_Readobj_Parser):
                         result.update({name.group(0): int(addr_value.group(0), 16)})
                 else:
                     if symbol_section and symbol_section.group(0) == "Undefined":
-                        print(f"symbol_section: {symbol_section}")
                         result.update({name.group(0): int(addr_value.group(0), 16)})
         return result

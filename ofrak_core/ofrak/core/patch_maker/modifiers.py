@@ -123,12 +123,12 @@ class PatchFromSourceModifier(Modifier):
             patch_bom.unresolved_symbols,
         )
 
+        patched_symbols = resource.get_attributes(LinkableBinaryAttributes).patched_symbols
+
         # Refresh patched_symbols with those defined in this patch
         for assembled_object in patch_bom.object_map.values():
             config = LinkableBinaryAnalyzerConfig(assembled_object.symbols)
             await resource.run(LinkableBinaryAnalyzer, config)
-
-        patched_symbols = resource.get_attributes(LinkableBinaryAttributes).patched_symbols
 
         # To support additional dynamic references in user space executables
         # Create and use a modifier that will:
