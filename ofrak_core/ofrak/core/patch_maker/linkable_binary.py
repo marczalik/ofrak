@@ -178,7 +178,7 @@ class LinkableBinary(GenericBinary):
         for symbol in await self.get_symbols():
             # if symbol.name in excluded_symbols:
             #     continue
-            if symbol.name in unresolved_symbols:
+            if unresolved_symbols and symbol.name in unresolved_symbols:
                 stubs_file = os.path.join(build_tmp_dir, f"stub_{symbol.name}.as")
                 stub_info = symbol.get_stub_info()
                 stub_body = "\n".join(

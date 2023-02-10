@@ -345,6 +345,9 @@ class Abstract_GNU_Toolchain(Toolchain, ABC):
 
         return self._parser.parse_sections(readobj_output)
 
+    def get_bin_file_rel_symbols(self, executable_path: str) -> Dict[str, int]:
+        return {}
+
 
 class GNU_10_Toolchain(Abstract_GNU_Toolchain):
     def __init__(

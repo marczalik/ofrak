@@ -72,6 +72,10 @@ class GNU_ELF_Parser(AbstractBinaryFileParser):
             segments.append(seg)
         return tuple(segments)
 
+    def parse_relocations(self, output: str) -> Dict[str, int]:
+        """ """
+        return {}
+
 
 class GNU_V10_ELF_Parser(GNU_ELF_Parser):
     file_format = BinFileType.ELF

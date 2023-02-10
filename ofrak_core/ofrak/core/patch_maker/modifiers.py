@@ -131,8 +131,8 @@ class PatchFromSourceModifier(Modifier):
 
         # Refresh patched_symbols with those defined in this patch
         for assembled_object in patch_bom.object_map.values():
-            config = LinkableBinaryAnalyzerConfig(assembled_object.symbols)
-            await resource.run(LinkableBinaryAnalyzer, config)
+            lba_config = LinkableBinaryAnalyzerConfig(assembled_object.symbols)
+            await resource.run(LinkableBinaryAnalyzer, lba_config)
 
         # To support additional dynamic references in user space executables
         # Create and use a modifier that will:

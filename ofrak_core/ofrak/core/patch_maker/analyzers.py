@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Mapping
+from typing import Mapping, Optional
 
 from ofrak.component.analyzer import Analyzer
 from ofrak.core.complex_block import ComplexBlock
@@ -34,7 +34,7 @@ class LinkableBinaryAttributes(ResourceAttributes):
 
 @dataclass
 class LinkableBinaryAnalyzerConfig(ComponentConfig):
-    patched_symbols: Mapping[str, int] = None
+    patched_symbols: Optional[Mapping[str, int]] = None
 
 
 class LinkableBinaryAnalyzer(Analyzer[None, LinkableBinaryAttributes]):
