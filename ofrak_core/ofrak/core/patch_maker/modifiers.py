@@ -24,6 +24,7 @@ from ofrak.core.patch_maker.model import SourceBundle
 from ofrak_patch_maker.model import PatchRegionConfig, FEM
 from ofrak_patch_maker.patch_maker import PatchMaker
 from ofrak_patch_maker.toolchain.model import Segment, ToolchainConfig
+from ofrak_type.error import NotFoundError
 from ofrak_type.memory_permissions import MemoryPermissions
 
 LOGGER = logging.getLogger(__file__)
@@ -123,7 +124,10 @@ class PatchFromSourceModifier(Modifier):
             patch_bom.unresolved_symbols,
         )
 
-        patched_symbols = resource.get_attributes(LinkableBinaryAttributes).patched_symbols
+        try:
+            patched_symbols = resource.get_attributes(LinkableBinaryAttributes).patched_symbols
+        except NotFoundError:
+            patched_symbols = {}
 
         # Refresh patched_symbols with those defined in this patch
         for assembled_object in patch_bom.object_map.values():
