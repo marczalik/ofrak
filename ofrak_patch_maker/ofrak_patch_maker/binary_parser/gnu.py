@@ -32,8 +32,8 @@ class GNU_ELF_Parser(AbstractBinaryFileParser):
 
     def parse_symbols(self, output: str) -> Dict[str, int]:
         """
-        Use `objdump` with the `--syms` flag to get info on all symbols in a file. Parses columns
-        based on: <https://stackoverflow.com/a/16471895/16690095>.
+        Use `objdump` with the `--syms` flag to get info on all defined symbols in a file. Parses
+        columns based on: <https://stackoverflow.com/a/16471895/16690095>.
         """
         return self._get_all_symbols(output, True)
 
@@ -65,8 +65,8 @@ class GNU_ELF_Parser(AbstractBinaryFileParser):
 
     def parse_relocations(self, output: str) -> Dict[str, int]:
         """
-        Use `objdump` with the `--syms` flag to get info on all symbols in a file. Parses columns
-        based on: <https://stackoverflow.com/a/16471895/16690095>.
+        Use `objdump` with the `--syms` flag to get info on all undefined symbols in a file. Parses
+        columns based on: <https://stackoverflow.com/a/16471895/16690095>.
         """
         return self._get_all_symbols(output, False)
 
