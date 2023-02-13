@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Mapping, Optional
+from typing import Dict
 
 from ofrak.component.analyzer import Analyzer
 from ofrak.core.complex_block import ComplexBlock
@@ -29,15 +29,15 @@ class ComplexBlockSymbolAnalyzer(Analyzer[None, LinkableSymbol]):
 
 @dataclass(**ResourceAttributes.DATACLASS_PARAMS)
 class LinkableBinaryAttributes(ResourceAttributes):
-    patched_symbols: Mapping[str, int]
+    patched_symbols: Dict[str, int]
 
 
 @dataclass
 class LinkableBinaryAnalyzerConfig(ComponentConfig):
-    patched_symbols: Optional[Mapping[str, int]] = None
+    patched_symbols: Dict[str, int]
 
 
-class LinkableBinaryAnalyzer(Analyzer[None, LinkableBinaryAttributes]):
+class LinkableBinaryAnalyzer(Analyzer[LinkableBinaryAnalyzerConfig, LinkableBinaryAttributes]):
     """
     Analyze a LinkableBinary and return all symbols that have been defined in previously applied
     patches.

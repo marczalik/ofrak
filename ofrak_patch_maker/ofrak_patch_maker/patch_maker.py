@@ -243,7 +243,7 @@ class PatchMaker:
         self._validate_bom_input(name, source_list, object_list, header_dirs)
         object_map = {}
         for o_file in object_list:
-            assembled_object = self.prepare_object(o_file)
+            assembled_object = self.prepare_object(self, o_file)
             object_map.update({o_file: assembled_object})
 
         out_dir = os.path.join(self.build_dir, name + "_bom_files")
