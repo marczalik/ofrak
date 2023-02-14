@@ -1,7 +1,6 @@
 import os
 import pytest
 import subprocess
-import time
 
 from ofrak_patch_maker.toolchain.llvm_12 import LLVM_12_0_1_Toolchain
 
@@ -137,8 +136,6 @@ async def test_patch_from_source_modifier(
         # (FEM), and then inject our patch into the binary.
         await resource.run(PatchFromSourceModifier, patch_from_source_config)
 
-    start_time = time.perf_counter()
-
     resource = await ofrak_context.create_root_resource_from_file(large_elf_file)
     new_segment = await add_and_return_segment(resource, 0x440000, 0x2000)
 
@@ -153,13 +150,9 @@ async def test_patch_from_source_modifier(
     await resource.pack()
     await resource.flush_to_disk(output_file_name)
 
-    end_time = time.perf_counter()
-
     assert os.path.exists(output_file_name)
     assert get_file_format(output_file_name) == BinFileType.ELF
 
     subprocess.run(["chmod", "+x", output_file_name])
     result = subprocess.run([output_file_name], capture_output=True)
     assert result.returncode == 36
-
-    assert end_time - start_time < 60

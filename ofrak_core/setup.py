@@ -71,6 +71,7 @@ setuptools.setup(
             "PyYAML~=6.0,>=5.4",
         ],
         "test": [
+            "angr~=9.2",
             "autoflake==1.4",
             "black==22.3.0",
             "pytest",
@@ -78,6 +79,8 @@ setuptools.setup(
             "hypothesis-trio",
             "trio-asyncio",
             "mypy==0.942",
+            "ofrak_angr~=1.0",
+            "ofrak_capstone~=1.0",
             "psutil~=5.9",
             "pyelftools==0.29",
             "pytest-aiohttp",
