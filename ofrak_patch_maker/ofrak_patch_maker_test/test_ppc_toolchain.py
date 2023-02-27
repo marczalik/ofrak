@@ -7,6 +7,7 @@ from ofrak_type import ArchInfo, InstructionSet, BitWidth, Endianness
 
 from ofrak_patch_maker_test.toolchain_asm import (
     run_monkey_patch_test,
+    run_challenge_3_reloc_toy_example_test,
 )
 
 from ofrak_patch_maker_test.toolchain_c import (
@@ -37,9 +38,8 @@ def toolchain_under_test(request) -> ToolchainUnderTest:
 
 
 # ASM Tests
-# def test_challenge_3_reloc_toy_example(toolchain_under_test: ToolchainUnderTest):
-#     # TODO
-#     pass
+def test_challenge_3_reloc_toy_example(toolchain_under_test: ToolchainUnderTest):
+    run_challenge_3_reloc_toy_example_test(toolchain_under_test)
 
 
 def test_monkey_patch(toolchain_under_test: ToolchainUnderTest):
