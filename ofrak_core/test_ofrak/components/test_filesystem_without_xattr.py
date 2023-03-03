@@ -16,6 +16,6 @@ def test_setup_and_teardown():
 
 
 @pytest.mark.serial
-async def test_filesystem_without_xattr(test_setup_and_teardown):
-    result = subprocess.run(["pytest", "./test_filesystem_component.py"])
-    assert result.returncode == 0
+def test_filesystem_without_xattr(test_setup_and_teardown):
+    returncode = pytest.main(["./test_filesystem_component.py"])
+    assert returncode == 0
