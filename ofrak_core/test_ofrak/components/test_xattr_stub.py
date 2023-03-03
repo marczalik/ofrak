@@ -48,19 +48,19 @@ async def test_call(xattr_stub_fixture, xattr_real_fixture, caplog):
 
 async def test_get(xattr_stub_fixture, xattr_real_fixture, caplog):
     xattr_real_fixture.set("user.foo", b"bar")
-    value = xattr_stub_fixture.get(None)
+    value = xattr_stub_fixture.get("user.foo")
     assert "Function get" in caplog.text
     assert type(value) == type(xattr_real_fixture.get("user.foo"))
 
 
 async def test_set(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.set(None, None)
+    value = xattr_stub_fixture.set("user.foo", b"bar")
     assert "Function set" in caplog.text
     assert type(value) == type(xattr_real_fixture.set("user.foo", b"bar"))
 
 
 async def test_remove(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.remove(None)
+    value = xattr_stub_fixture.remove("user.foo")
     xattr_real_fixture.set("user.foo", b"bar")
     assert "Function remove" in caplog.text
     assert type(value) == type(xattr_real_fixture.remove("user.foo"))
@@ -79,20 +79,20 @@ async def test_len(xattr_stub_fixture, xattr_real_fixture, caplog):
 
 
 async def test_delitem(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.__delitem__(None)
+    value = xattr_stub_fixture.__delitem__("user.foo")
     xattr_real_fixture.set("user.foo", b"bar")
     assert "Function __delitem__" in caplog.text
     assert type(value) == type(xattr_real_fixture.__delitem__("user.foo"))
 
 
 async def test_setitem(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.__setitem__(None, None)
+    value = xattr_stub_fixture.__setitem__("user.foo", b"bar")
     assert "Function __setitem__" in caplog.text
     assert type(value) == type(xattr_real_fixture.__setitem__("user.foo", b"bar"))
 
 
 async def test_getitem(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.__getitem__(None)
+    value = xattr_stub_fixture.__getitem__("user.foo")
     xattr_real_fixture.set("user.foo", b"bar")
     assert "Function __getitem__" in caplog.text
     assert type(value) == type(xattr_real_fixture.__getitem__("user.foo"))
@@ -105,7 +105,7 @@ async def test_iterkeys(xattr_stub_fixture, xattr_real_fixture, caplog):
 
 
 async def test_has_key(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.has_key(None)
+    value = xattr_stub_fixture.has_key("user.foo")
     assert "Function has_key" in caplog.text
     assert type(value) == type(xattr_real_fixture.has_key("user.foo"))
 
@@ -117,7 +117,7 @@ async def test_clear(xattr_stub_fixture, xattr_real_fixture, caplog):
 
 
 async def test_update(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.update(None)
+    value = xattr_stub_fixture.update({"user.foo": b"bar"})
     assert "Function update" in caplog.text
     assert type(value) == type(xattr_real_fixture.update({"user.foo": b"bar"}))
 
@@ -129,7 +129,7 @@ async def test_copy(xattr_stub_fixture, xattr_real_fixture, caplog):
 
 
 async def test_setdefault(xattr_stub_fixture, xattr_real_fixture, caplog):
-    value = xattr_stub_fixture.setdefault(None)
+    value = xattr_stub_fixture.setdefault("user.foo")
     assert "Function setdefault" in caplog.text
     assert type(value) == type(xattr_real_fixture.setdefault("user.foo"))
 
@@ -167,30 +167,31 @@ async def test_items(xattr_stub_fixture, xattr_real_fixture, caplog):
 
 
 async def test_listxattr(caplog):
-    value = xattr_stub.listxattr(None)
+    path = os.path.join(EXAMPLE_DIRECTORY, "README.md")
+    value = xattr_stub.listxattr(path)
     assert "Function listxattr" in caplog.text
-    assert type(value) == type(xattr.listxattr(os.path.join(EXAMPLE_DIRECTORY, "README.md")))
+    assert type(value) == type(xattr.listxattr(path))
 
 
 async def test_getxattr(caplog):
-    value = xattr_stub.getxattr(None, None)
+    path = os.path.join(EXAMPLE_DIRECTORY, "README.md")
+    xattr_stub.setxattr(path, "user.foo", b"bar")
+    xattr.setxattr(path, "user.foo", b"bar")
+
+    value = xattr_stub.getxattr(path, "user.foo")
     assert "Function getxattr" in caplog.text
-    assert type(value) == type(
-        xattr.getxattr(os.path.join(EXAMPLE_DIRECTORY, "README.md"), "user.foo")
-    )
+    assert type(value) == type(xattr.getxattr(path, "user.foo"))
 
 
 async def test_setxattr(caplog):
-    value = xattr_stub.setxattr(None, None, None)
+    path = os.path.join(EXAMPLE_DIRECTORY, "README.md")
+    value = xattr_stub.setxattr(path, "user.foo", b"bar")
     assert "Function setxattr" in caplog.text
-    assert type(value) == type(
-        xattr.setxattr(os.path.join(EXAMPLE_DIRECTORY, "README.md"), "user.foo", b"bar")
-    )
+    assert type(value) == type(xattr.setxattr(path, "user.foo", b"bar"))
 
 
 async def test_removexattr(caplog):
-    value = xattr_stub.removexattr(None, None)
+    path = os.path.join(EXAMPLE_DIRECTORY, "README.md")
+    value = xattr_stub.removexattr(path, "user.foo")
     assert "Function removexattr" in caplog.text
-    assert type(value) == type(
-        xattr.removexattr(os.path.join(EXAMPLE_DIRECTORY, "README.md"), "user.foo")
-    )
+    assert type(value) == type(xattr.removexattr(path, "user.foo"))
