@@ -9,14 +9,6 @@ EXAMPLE_DIRECTORY = os.path.join(os.path.dirname(__file__), "assets/")
 EXAMPLE_FILE = os.path.join(EXAMPLE_DIRECTORY, "README.md")
 
 
-@pytest.fixture(scope="session")
-def move_to_test_directory():
-    current_directory = os.getcwd()
-    os.chdir(EXAMPLE_DIRECTORY)
-    yield
-    os.chdir(current_directory)
-
-
 @pytest.fixture
 def xattr_class_stub():
     stub = xattr_stub.xattr(EXAMPLE_FILE)
