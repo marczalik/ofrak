@@ -72,6 +72,7 @@ jobs:
           docker images
       - name: Install from TestPyPI
         run: |
+          pip install --upgrade pip
           python3 -m pip install -i https://test.pypi.org/simple/ ofrak-type --pre
           python3 -m pip install -i https://test.pypi.org/simple/ ofrak-io --pre
           python3 -m pip install -i https://test.pypi.org/simple/ ofrak --pre
