@@ -78,4 +78,4 @@ jobs:
             --entrypoint bash \
             redballoonsecurity/ofrak/core-dev-base:latest \
             -c  "pip install --upgrade pip \
-                python3 -m pip install -i https://test.pypi.org/simple/ ofrak"
+                && python3 -m pip install -i https://test.pypi.org/simple/ ofrak"
