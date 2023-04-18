@@ -78,10 +78,10 @@ jobs:
             --entrypoint bash \
             redballoonsecurity/ofrak/core-dev-base:latest \
             -c  "pip install --upgrade pip \
-                && python3 -m pip install --upgrade --no-deps --force-reinstall -i https://test.pypi.org/simple/ ofrak-type \
-                && python3 -m pip install --upgrade --no-deps --force-reinstall -i https://test.pypi.org/simple/ ofrak-io \
-                && python3 -m pip install --upgrade --no-deps --force-reinstall -i https://test.pypi.org/simple/ ofrak \
-                && python3 -m pip install --upgrade --no-deps --force-reinstall -i https://test.pypi.org/simple/ ofrak-patch-maker \
+                && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-type \
+                && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-io \
+                && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak \
+                && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-patch-maker \
                 && git clone https://github.com/redballoonsecurity/ofrak.git \
                 && printf "test:\n\
                     make -C ofrak_type test\n\
