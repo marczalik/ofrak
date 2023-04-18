@@ -2,6 +2,7 @@ name: Deploy packkage and verify
 
 on:
   workflow_dispatch:
+  push:
 
 permissions:
   contents: read
