@@ -71,13 +71,13 @@ jobs:
             | docker load 
           docker images
       - name: Install from TestPyPI
+        # TODO: Can this be broken up?
         run: |
           docker run \
             --interactive \
             --rm \
             --entrypoint bash \
             redballoonsecurity/ofrak/core-dev-base:latest \
-            # TODO: Can this be broken up?
             -c  "pip install --upgrade pip \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-type \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-io \
