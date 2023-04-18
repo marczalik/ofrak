@@ -72,7 +72,7 @@ jobs:
           docker images
       - name: Install from TestPyPI
         run: |
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-type
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-io
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-patch-maker
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-type --pre
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-io --pre
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak --pre
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-patch-maker --pre
