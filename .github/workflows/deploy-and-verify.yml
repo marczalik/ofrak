@@ -1,0 +1,74 @@
+name: Deploy packkage and verify
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  
+defaults:
+  run:
+    shell: bash
+    
+jobs:
+  build-base-image:   
+      name: Build the common base OFRAK Docker image
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+          with:
+            lfs: true
+        - uses: actions/setup-python@v4
+          with:
+            python-version: '3.7'
+            cache: pip
+            cache-dependency-path: '**/setup.py'
+        - name: Cache base image
+          id: cache-image
+          uses: actions/cache@v3
+          with:
+            key: ofrak-core-dev
+            path: ofrak-base.tar.gz
+        - name: Build base image
+          # Always rebuild the base image when the scheduled workflow runs
+          if: inputs.flush_cache || steps.cache-image.outputs.cache-hit != 'true' || github.event_name == 'schedule'
+          run: |
+            python3 -m pip install PyYAML
+            DOCKER_BUILDKIT=1 python3 build_image.py --config ofrak-core-dev.yml --base 
+        - name: Export base image
+          if: inputs.flush_cache || steps.cache-image.outputs.cache-hit != 'true' || github.event_name == 'schedule'
+          run: |
+            sudo apt install pigz pv
+            docker save redballoonsecurity/ofrak/core-dev-base:latest \
+              | pigz -9 \
+              | pv --size 2400m --interval 5 --force \
+              > ofrak-base.tar.gz 
+              
+  install-from-testpypi:
+    name: Install OFRAK packages from TestPyPI
+    runs-on: ubuntu-latest
+    needs: build-base-image
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+          cache: pip
+          cache-dependency-path: '**/setup.py'
+      - name: Cache base image
+        id: cache-image
+        uses: actions/cache@v3
+        with:
+          key: ofrak-core-dev
+          path: ofrak-base.tar.gz
+      - name: Load base image
+        run: |
+          sudo apt install pv
+          pv --interval 5 --force ofrak-base.tar.gz \
+            | docker load 
+          docker images
+      - name: Install from TestPyPI
+        run: |
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak
