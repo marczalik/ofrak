@@ -2,7 +2,6 @@ name: Deploy packkage and verify
 
 on:
   workflow_dispatch:
-  push:
 
 permissions:
   contents: read
@@ -72,4 +71,7 @@ jobs:
           docker images
       - name: Install from TestPyPI
         run: |
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-type
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-io
           python3 -m pip install -i https://test.pypi.org/simple/ ofrak
+          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-patch-maker
