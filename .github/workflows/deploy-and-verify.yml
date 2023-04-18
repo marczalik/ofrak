@@ -73,7 +73,4 @@ jobs:
       - name: Install from TestPyPI
         run: |
           pip install --upgrade pip setuptools
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-type --pre
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-io --pre
           python3 -m pip install -i https://test.pypi.org/simple/ ofrak --pre
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak-patch-maker --pre
