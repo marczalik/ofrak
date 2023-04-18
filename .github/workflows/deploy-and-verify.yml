@@ -77,17 +77,15 @@ jobs:
             --rm \
             --entrypoint bash \
             redballoonsecurity/ofrak/core-dev-base:latest \
+            # TODO: Can this be broken up?
             -c  "pip install --upgrade pip \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-type \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-io \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-patch-maker \
                 && git clone https://github.com/redballoonsecurity/ofrak.git \
-                && printf "test:\n \
-                  make -C ofrak_type test\n \
-                  make -C ofrak_io test\n \
-                  make -C ofrak_patch_maker test\n \
-                  make -C ofrak_core test\n \
-                  make -C frontend test\n \
-                  \n" >> Makefile \
-                && make test"
+                && make -C ofrak/ofrak_type test \
+                && make -C ofrak/ofrak_io test \
+                && make -C ofrak/ofrak_patch_maker test \
+                && make -C ofrak/ofrak_core test \
+                && make -C ofrak/frontend test"
