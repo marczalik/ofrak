@@ -72,5 +72,10 @@ jobs:
           docker images
       - name: Install from TestPyPI
         run: |
-          pip install --upgrade pip setuptools
-          python3 -m pip install -i https://test.pypi.org/simple/ ofrak
+          docker run \
+            --interactive \
+            --rm \
+            --entrypoint bash \
+            redballoonsecurity/ofrak/core-dev-base:latest \
+            -c  "pip install --upgrade pip \
+                python3 -m pip install -i https://test.pypi.org/simple/ ofrak"
