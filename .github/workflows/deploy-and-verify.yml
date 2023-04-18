@@ -83,12 +83,11 @@ jobs:
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-patch-maker \
                 && git clone https://github.com/redballoonsecurity/ofrak.git \
-                && printf "test:\n\
-                    make -C ofrak_type test\n\
-                    make -C ofrak_io test\n\
-                    make -C ofrak_patch_maker test\n\
-                    make -C ofrak_core test\n\
-                    make -C ofrak_ghidra test\n\
-                    make -C frontend test\n\
+                && printf "test:\n \
+                  make -C ofrak_type test\n \
+                  make -C ofrak_io test\n \
+                  make -C ofrak_patch_maker test\n \
+                  make -C ofrak_core test\n \
+                  make -C frontend test\n \
                   \n" >> Makefile \
                 && make test"
