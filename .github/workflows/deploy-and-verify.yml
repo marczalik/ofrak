@@ -78,7 +78,8 @@ jobs:
             --rm \
             --entrypoint bash \
             redballoonsecurity/ofrak/core-dev-base:latest \
-            -c  "git clone https://github.com/redballoonsecurity/ofrak.git \
+            -c  "apt-get update && apt-get install git-lfs -y \
+                && git clone https://github.com/redballoonsecurity/ofrak.git \
                 && cd ofrak/ofrak_core && make install && cd / \
                 && pip install --upgrade pip \
                 && python3 -m pip install --upgrade --no-deps --force-reinstall --pre -i https://test.pypi.org/simple/ ofrak-type \
