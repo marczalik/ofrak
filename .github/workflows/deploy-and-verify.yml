@@ -90,3 +90,7 @@ jobs:
                 && make -C ofrak/ofrak_patch_maker test \
                 && make -C ofrak/ofrak_core test \
                 && make -C ofrak/frontend test"
+      # Install Ghidra (separate docker image?)
+      # Make ofrak_ghidra
+      # ofrak_core still failing tests because nothing is being analyzed? Potentially because no test_ofrak module?
+      # ofrak_angr, ofrak_capstone, and ofrak_ghidra are failing because there is no module test_ofrak
