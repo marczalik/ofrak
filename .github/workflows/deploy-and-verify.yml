@@ -46,7 +46,7 @@ jobs:
               > ofrak-base.tar.gz 
               
   install-from-testpypi:
-    name: Install OFRAK packages from TestPyPI
+    name: Build TestPyPI image
     runs-on: ubuntu-latest
     needs: build-base-image
     steps:
@@ -71,6 +71,20 @@ jobs:
             | docker load 
           docker images
       - name: Install from TestPyPI
+        run: |
+          docker build \
+          -t redballoonsecurity/ofrak/testpypi:latest \
+          . \
+          -f testpypi.Dockerfile \
+          --cache-from redballoonsecurity/ofrak/core-dev-base:latest
+      - name: Export TestPyPI image
+        if: inputs.flush_cache || steps.cache-image.outputs.cache-hit != 'true' || github.event_name == 'schedule'
+        run: |
+          sudo apt install pigz pv
+          docker save redballoonsecurity/ofrak/tespypi:latest \
+            | pigz -9 \
+            | pv --size 2400m --interval 5 --force \
+            > ofrak-testpypi.tar.gz
         # TODO: Can this be broken up?
         run: |
           docker run \
@@ -78,7 +92,7 @@ jobs:
             --rm \
             --entrypoint bash \
             redballoonsecurity/ofrak/core-dev-base:latest \
-            -c  "apt-get update && apt-get install -y python3-dev libffi-dev build-essential virtualenvwrapper \
+            -c  "apt-get update && apt-get install -y python3-dev libffi-dev build-essential \
                 && apt-get install git-lfs -y \
                 && git clone https://github.com/redballoonsecurity/ofrak.git \
                 && cd ofrak/ofrak_core && make install && cd / \
