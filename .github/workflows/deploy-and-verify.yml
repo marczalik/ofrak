@@ -62,8 +62,8 @@ jobs:
         id: cache-image
         uses: actions/cache@v3
         with:
-          key: ofrak-core-dev
-          path: ofrak-base.tar.gz
+          key: ofrak-testpypi-base
+          path: ofrak-testpypi-base.tar.gz
       - name: Load base image
         run: |
           sudo apt install pv
@@ -103,8 +103,8 @@ jobs:
       id: cache-image
       uses: actions/cache@v3
       with:
-        key: ofrak-core-dev
-        path: ofrak-base.tar.gz
+        key: ofrak-testpypi-base
+        path: ofrak-testpypi-base.tar.gz
     - name: Load base image
       run: |
         sudo apt install pv
