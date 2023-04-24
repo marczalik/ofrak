@@ -73,9 +73,9 @@ jobs:
       - name: Install from TestPyPI
         run: |
           docker build \
-          -t redballoonsecurity/ofrak/testpypi:latest \
+          -t redballoonsecurity/ofrak/testpypi-base:latest \
           . \
-          -f testpypi.Dockerfile \
+          -f testpypi-base.Dockerfile \
           --cache-from redballoonsecurity/ofrak/core-dev-base:latest
       - name: Export TestPyPI image
         if: inputs.flush_cache || steps.cache-image.outputs.cache-hit != 'true' || github.event_name == 'schedule'
@@ -111,6 +111,32 @@ jobs:
         pv --interval 5 --force ofrak-base.tar.gz \
           | docker load 
         docker images
+    - name: Build Ghidra image
+      run: |
+          docker build \
+          -t redballoonsecurity/ofrak/testpypi-ghidra:latest \
+          . \
+          -f testpypi-ghidra``.Dockerfile \
+          --cache-from redballoonsecurity/ofrak/testpypi-base:latest
+    - name: Test documentation
+      run: |
+        docker run \
+          --interactive \
+          --rm \
+          --entrypoint bash \
+          --volume "$(pwd)":/ofrak \
+          redballoonsecurity/ofrak/testpypi-ghidra:latest \
+          -c "cd /ofrak \
+              && mkdocs build --site-dir /tmp/docs"
+    - name: Test components
+      run: |
+        docker run \
+          --interactive \
+          --rm \
+          --entrypoint bash \
+          redballoonsecurity/ofrak/testpypi-ghidra:latest \
+          -c "python -m ofrak_ghidra.server start \
+              && make test"
       
   # Build ghidra image and run tests
   # Build ofrak_angr and ofrak_capstone image and run tests
