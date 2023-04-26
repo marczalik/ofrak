@@ -1,37 +1,57 @@
+import logging
 import openai
 
 from dataclasses import dataclass
 
 from ofrak import Resource
-from ofrak.core.strings import AsciiString
+from ofrak.core.strings import AsciiString, StringPatchingConfig, StringPatchingModifier
 from ofrak.component.modifier import Modifier
 from ofrak_chatgpt.chatgpt import ChatGPTModifierConfig
+import time
+
+LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
 class SassyStringModifierConfig(ChatGPTModifierConfig):
-    pass
+    min_length: int = 50
 
 
 class SassyStringModifier(Modifier[SassyStringModifierConfig]):
     targets = (AsciiString,)
-    outputs = (AsciiString,)
 
     async def modify(self, resource: Resource, config: SassyStringModifierConfig) -> None:
         # Call ChatGPT API to sassify an individual string
-        string = resource.view_as(AsciiString)
+        string = await resource.view_as(AsciiString)
         text = string.Text
-        response = openai.ChatCompletion.create(
-            model=config.model,
-            temperature=1,
-            max_tokens=len(text) * 2,
-            messages=[
-                {"role": "user", "content": f"Make this text sassy: {text}"},
-                {
-                    "role": "system",
-                    "content": "You are a sassy person who loves to spice up text with your sassy attitude. Your responses contain only ASCII text.",
-                },
-            ],
-        )
-        print(f"chatgpt response: {response.choice[0].message.content}")
-        return AsciiString(response.choices[0].message.content)
+        text_length = len(text)
+
+        if text_length >= config.min_length:
+            if " " not in text:
+                messages = [
+                    {
+                        "role": "user",
+                        "content": f"Make this variable name sassy: {text}. Your response must be a valid variable name that is {text_length} characters long.",
+                    },
+                ]
+            else:
+                messages = [
+                    {
+                        "role": "user",
+                        "content": f"Make this text sassy: {text}. Your response must be {text_length} characters long.",
+                    },
+                ]
+            try:
+                response = openai.ChatCompletion.create(
+                    model=config.model, temperature=1, max_tokens=text_length * 2, messages=messages
+                )
+                if response:
+                    print(f"original text: {text}")
+                    print(f"chatgpt response: {response.choices[0].message.content}")
+                data_range = await resource.get_data_range_within_root()
+                data = response.choices[0].message.content[: text_length - 1]
+                string_patch_config = StringPatchingConfig(offset=0, string=data)
+                await resource.run(StringPatchingModifier, string_patch_config)
+                time.sleep(20)
+            except Exception as e:
+                LOGGER.warning(f"Exception {e} occurred, skipped {text}")
