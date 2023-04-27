@@ -139,7 +139,6 @@ class SassyStringModifier(Modifier[SassyStringModifierConfig]):
         @retry_with_exponential_backoff
         def retry_response(**kwargs) -> Optional[str]:
             return openai.ChatCompletion.create(**kwargs)
-            return response
 
         return retry_response(
             model=config.model,
